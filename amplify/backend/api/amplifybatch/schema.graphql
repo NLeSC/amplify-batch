@@ -1,0 +1,61 @@
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+  # Filename
+  name: String
+  # Size in bytes
+  size: Int
+  # For local deployment use Minio.io which requires explicit endpoint url
+  endpoint: AWSURL
+  # Key used by Storage amplify client (import { Storage } from 'aws-amplify')
+  ampkey: String!
+}
+
+type Description {
+    name: String!
+    input: S3Object
+}
+
+enum JobState {
+    UNKNOWN
+    #"Below are job states of an AWS Batch job (https://docs.aws.amazon.com/batch/latest/userguide/job_states.html)"
+    SUBMITTED
+    PENDING
+    RUNNABLE
+    STARTING
+    RUNNING
+    SUCCEEDED
+    FAILED
+}
+
+type Status {
+    state: JobState!
+    # Filled if status==FAILED
+    error: String
+    # Identity id of user who submitted job
+    submittedBy: String!
+    submittedAt: AWSDateTime!
+    completedAt: AWSDateTime
+    # Fraction of progress
+    progress: Float
+    # Job identifier of AWS Batch
+    batchJobIdentifier: String!
+}
+
+type Result {
+    output: S3Object!
+}
+
+type Job 
+    @model
+    @versioned
+    @auth(rules: [
+        { allow: owner },
+        { allow: groups, groups: ["admin"] }
+    ]) {
+    id: ID!
+    description: Description!
+    status: Status
+    result: Result
+}

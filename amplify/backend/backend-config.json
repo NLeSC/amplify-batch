@@ -17,5 +17,22 @@
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
 		}
+	},
+	"api": {
+		"amplifybatch": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"additionalAuthenticationProviders": [],
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authamplifybatch8081b447"
+						}
+					}
+				}
+			}
+		}
 	}
 }
