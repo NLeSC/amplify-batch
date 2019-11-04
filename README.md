@@ -1,44 +1,92 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Amplify batch
 
-## Available Scripts
+An Amazon Web Service powered application to run batch job from a React based web application.
 
-In the project directory, you can run:
+## Architecture
 
-### `yarn start`
+The web application was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The web application uses [AWS AppSync](https://aws.amazon.com/appsync/) and [Amplify](https://aws-amplify.github.io/docs/) to setup and run infrastructure.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* Uses Graphql to communicate between web browser and server
+* Uses AWS lambda to submit a AWS Batch job
+* Uses AWS Batch job, written in Python, to run the job.
+* Uses AWS ECR to store Docker image for AWS Batch
+* Uses AWS DynamoDB for persisting data
+* Uses AWS S3 for storing input/output data files
+* Uses AWS Cognito for authentication
+* Uses AWS S3 for deployment
+* Uses AWS S3 for hosting
+* Uses eu-central-1 aka frankfurt aws region
+* Uses AWS lambda to cancel a AWS Batch job
+* Uses AWS lambda to listen for a AWS Batch job state changes and store them in DynamoDB
+* Allows AWS Batch job to read/write to S3 and DynamoDB
+* Allows AWS lambda functions to read/write to S3 and DynamoDB
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Requirements
 
-### `yarn test`
+* yarn, NodeJS package manager
+* Docker, used for building batch job Docker image
+* aws cli (`pip install awscli`)
+* amplify cli (`npm install -g @aws-amplify/cli`)
+* AWS account
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `yarn build`
+Install web application dependencies with
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+yarn
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Setup infrastructure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sh
+amplify configure
+```
 
-### `yarn eject`
+To start when there are local amplify resources, but none in cloud with the amplify environment suffix.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```sh
+amplify env add
+# Asks for new environment name
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To use current deployed amplify environment in the cloud
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```sh
+amplify env pull
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+See [Amplify documentation](https://aws-amplify.github.io/docs/cli-toolchain/quickstart#environments--teams) for more information about amplify environments.
 
-## Learn More
+## Web application scripts
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To run app in development mode
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+yarn start
+```
+
+To run tests
+
+```sh
+yarn test
+```
+
+To build production
+
+```sh
+yarn build
+```
+
+## Deploy services
+
+```sh
+# Deploy backend
+amplify push
+# Deploy frontend
+amplify publish
+```
+
+## Build Docker image
+
