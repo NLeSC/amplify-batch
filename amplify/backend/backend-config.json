@@ -4,5 +4,18 @@
 			"service": "S3AndCloudFront",
 			"providerPlugin": "awscloudformation"
 		}
+	},
+	"auth": {
+		"amplifybatch8081b447": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
+	"storage": {
+		"workspace": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
 	}
 }
