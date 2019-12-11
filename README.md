@@ -1,3 +1,5 @@
+# This repo has been replaced with https://github.com/NLeSC/nlesc-serverless-boilerplate
+
 # Amplify batch
 
 An Amazon Web Service powered application to run batch job from a React based web application.
